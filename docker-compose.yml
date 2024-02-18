@@ -1,0 +1,44 @@
+version: "3"
+
+services: 
+  backend: 
+    container_name: backend
+    build: 
+      context: backend
+      dockerfile: Dockerfile
+    image: backend-image
+    ports: 
+      - 4004:4008
+    env_file: .env
+    restart: unless-stopped
+    networks: 
+      - backend
+  
+  frontend: 
+    container_name: frontend
+    build: 
+      context: frontend
+      dockerfile: Dockerfile
+    image: frontend-image
+    ports: 
+      - 8081:80
+    restart: unless-stopped
+    networks: 
+      - frontend
+
+  database_postgres: 
+    container_name: postgres
+    image: postgres
+    env_file: .env
+    volumes: 
+      - tompostgres:/data/postgres
+    restart: unless-stopped
+    networks: 
+      - backend
+  
+volumes: 
+  tompostgres: 
+
+networks: 
+  backend:
+  frontend:
